@@ -77,8 +77,15 @@ def xlcominfo() :
         cominfo.append(t)
 
     for i in cominfo :
-        print(i)
-    print()
+        for p, j in enumerate(i) :
+            print(j)
+            if p == 0 :
+                print()
+        print()
+        print('-------------------------------')
+        print()
+
+
     '''
     print("기업명 : "+cominfo[0])
     print("회사직무 : "+cominfo[3])
