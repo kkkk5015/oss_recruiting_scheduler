@@ -1,5 +1,8 @@
 import openpyxl as xl
 import datetime as d
+import requests
+from bs4 import BeautifulSoup
+import urllib
 '''
     기능 저장, 분류, ...
     
@@ -15,6 +18,7 @@ def xlsave() :
     #print("일정을 저장할 엑셀파일의 주소를 적어주세요 : ",sep='',end='')
     ht = input("일정을 저장할 엑셀파일의 주소를 적어주세요 : ")
     while True :
+        print()
         ent = []
         company_name = str(input("지원 하실 회사의 이름을 적어주세요(첫 화면으로 돌아가려면 *을 적어주제요) : "))
         if company_name == '*' :
@@ -34,10 +38,60 @@ def xlsave() :
 
 
 
+def xlout() :
+    # 기능 지원 회사 나열, ㅇ
+    print()
+    print("1. 회사 정보 조회하기")
+    a = input("원하시는 업무 번호를 적어주세요(나가기는 * 입력) : ")
+
+    if a == '1' :
+        xlcominfo()
+
+def xlcominfo() :
+    print()
+    comname = input("조회할 기업명을 입력해주세요 : ")
+    cominfo = []
+    temp = []
+    #comname = '파수닷컴'
+    cominfourl = 'http://www.jobkorea.co.kr/Salary/Index?coKeyword=' + comname + '&tabindex=0&indsCtgrCode=&indsCode=&jobTypeCode=&haveAGI=0&orderCode=2&coPage=1#salarySearchCompany'
+    # mykey = {'keyword' : comname }
+    r = requests.get(cominfourl)
+    soup = BeautifulSoup(r.text, 'html.parser')
+    keyword = soup.select('.salaryCompanyList .container .list li a')
+    #print(keyword)
+    for word in keyword:
+        w = list(map(str,word.get_text().split('\n')))
+        temp.append(w)
+
+        #temp = list(map(str, word.get_text().split('\n')))
+    #print(temp)
+    for c in temp :
+        t = []
+        for k in c :
+            if k in t or k == '' :
+                continue
+            elif k == '좋아요' or k == '채용중':
+                continue
+            t.append(k)
+
+        cominfo.append(t)
+
+    for i in cominfo :
+        print(i)
+    print()
+    '''
+    print("기업명 : "+cominfo[0])
+    print("회사직무 : "+cominfo[3])
+    print(cominfo[4])
+    print(cominfo[5])
+    print("평균연봉 : "+cominfo[6])
+    '''
+
 
 
 
 while True :
+    print()
     print("1. 지원 일정 저장하기")
     print("2. 지원 일정 조회하기")
     print("원하시는 업무 번호를 적어주세요(나가기는 * 입력) : ", sep="",end="")
@@ -46,6 +100,8 @@ while True :
         break
     if st == '1' :
         xlsave()
+    if st == '2' :
+        xlout()
 
 
 
