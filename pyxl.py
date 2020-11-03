@@ -3,6 +3,7 @@ import datetime as d
 import requests
 from bs4 import BeautifulSoup
 import urllib
+import webbrowser
 '''
     기능 저장, 분류, ...
     
@@ -14,7 +15,7 @@ import urllib
             지원 날짜별,  
 '''
 
-def xlsave() :
+def xlsave() : # 액셀 저장 파트
     #print("일정을 저장할 엑셀파일의 주소를 적어주세요 : ",sep='',end='')
     ht = input("일정을 저장할 엑셀파일의 주소를 적어주세요 : ")
     while True :
@@ -30,6 +31,7 @@ def xlsave() :
         ent = [company_name,d_day,code_day,com_url,code_lan]
         wb = xl.load_workbook(ht)
         ws = wb['Sheet']
+        # 혹시 필요하다면 sheet 값도 받아야함
         ws.append(ent)
         wb.save(ht)
         print()
@@ -38,16 +40,40 @@ def xlsave() :
 
 
 
-def xlout() :
+def xlout() :  # 조회 기능 파트
     # 기능 지원 회사 나열, ㅇ
     print()
     print("1. 회사 정보 조회하기")
+    print("2. 회사 지원홈페이지 가기")
     a = input("원하시는 업무 번호를 적어주세요(나가기는 * 입력) : ")
 
     if a == '1' :
         xlcominfo()
+    elif a == '2' :
+        xlrecurl()
+def xlrecurl() :
+    print()
+    ht = input("저장된 엑셀파일의 주소를 적어주세요 : ")
+    wb = xl.load_workbook(ht)
+    # 필요하다면 sheet 값도 받아야한다.
+    ws = wb['Sheet']
+    col_value = []
+    for col in ws.columns :
+        col_l = []
+        for cell in col :
+            col_l.append(cell.value)
+        col_value.append(col_l)
+    print()
+    for i, com in enumerate(col_value[0]) :
+        print('{}. {}'.format(i,com))
+    print()
+    comnum = int(input("원하는 회사의 번호를 입력해주세요 : "))
+    print()
+    comurl = col_value[3][comnum]
+    webbrowser.open(comurl)
 
-def xlcominfo() :
+
+def xlcominfo() : #회사 정보 가져오기
     print()
     comname = input("조회할 기업명을 입력해주세요 : ")
     cominfo = []
@@ -76,9 +102,9 @@ def xlcominfo() :
 
         cominfo.append(t)
 
-    for i in cominfo :
-        for p, j in enumerate(i) :
-            print(j)
+    for com in cominfo :
+        for p, line in enumerate(com) :
+            print(line)
             if p == 0 :
                 print()
         print()
@@ -93,6 +119,7 @@ def xlcominfo() :
     print(cominfo[5])
     print("평균연봉 : "+cominfo[6])
     '''
+
 
 
 
