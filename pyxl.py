@@ -1,9 +1,11 @@
+import webbrowser
 import openpyxl as xl
 import datetime as d
 import requests
 from bs4 import BeautifulSoup
 import urllib
-import webbrowser
+from openpyxl.workbook import Workbook
+from openpyxl.styles import Font
 '''
     기능 저장, 분류, ...
     
@@ -14,10 +16,28 @@ import webbrowser
         분류 
             지원 날짜별,  
 '''
+def create(): #엑셀파일 만들어서 구분하기
+    wb = Workbook()
+    ws = wb.active
+    ws['A1'] = "회사명"
+    # 폰트 스타일링
+    ws['A1'].font = Font(bold=True,color='000000FF',size=15)
+    ws['B1'] = "마감일"
+    ws['B1'].font = Font(bold=True,color='000000FF',size=15)
+    ws['C1'] = "코테 유무(날짜)"
+    ws['C1'].font = Font(bold=True,color='000000FF',size=15)
+    ws['D1'] = '회사지원url'
+    ws['D1'].font = Font(bold=True,color='000000FF',size=15)
+    ws['E1'] = '코테 지원 언어'
+    ws['E1'].font = Font(bold=True,color='000000FF',size=15)
+    # ht = input("엑셀파일 만들기 위해 저장할 위치 입력해주세요 : ")
+    wb.save('Company Schedules.xlsx')
+    print("현재 파일 위치에 'Company Schedules'라는 엑셀 파일을 만들었습니다")
 
 def xlsave() : # 액셀 저장 파트
-    #print("일정을 저장할 엑셀파일의 주소를 적어주세요 : ",sep='',end='')
-    ht = input("일정을 저장할 엑셀파일의 주소를 적어주세요 : ")
+    # #print("일정을 저장할 엑셀파일의 주소를 적어주세요 : ",sep='',end='')
+    # ht = input("일정을 저장할 엑셀파일의 주소를 적어주세요 : ")
+    create()
     while True :
         print()
         ent = []
@@ -29,11 +49,11 @@ def xlsave() : # 액셀 저장 파트
         com_url = str(input("회사 지원 홈페이지 주소를 적어주세요 : "))
         code_lan = str(input("코딩테스트 언어를 모두 적어 주세요, 테스트가 없다면 x입력 (예시 : java, c++, python) : "))
         ent = [company_name,d_day,code_day,com_url,code_lan]
-        wb = xl.load_workbook(ht)
+        wb = xl.load_workbook('Company Schedules.xlsx')
         ws = wb['Sheet']
         # 혹시 필요하다면 sheet 값도 받아야함
         ws.append(ent)
-        wb.save(ht)
+        wb.save('Company Schedules.xlsx')
         print()
         print("지원 회사가 저장되었습니다. ")
         print()
@@ -58,8 +78,8 @@ def xlout() :  # 조회 기능 파트
 
 def xlrecurl() :
     print()
-    ht = input("저장된 엑셀파일의 주소를 적어주세요 : ")
-    wb = xl.load_workbook(ht)
+    # ht = input("저장된 엑셀파일의 주소를 적어주세요 : ")
+    wb = xl.load_workbook('Company Schedules.xlsx')
     # 필요하다면 sheet 값도 받아야한다.
     ws = wb['Sheet']
     col_value = []
@@ -69,7 +89,7 @@ def xlrecurl() :
             col_l.append(cell.value)
         col_value.append(col_l)
     print()
-    for i, com in enumerate(col_value[0]) :
+    for i, com in enumerate(col_value[0][1:]) :
         print('{}. {}'.format(i,com))
     print()
     comnum = int(input("원하는 회사의 번호를 입력해주세요 : "))
