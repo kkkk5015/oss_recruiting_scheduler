@@ -1,5 +1,4 @@
 import webbrowser
-
 import openpyxl as xl
 import datetime as d
 import requests
