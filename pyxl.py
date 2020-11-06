@@ -62,18 +62,31 @@ def xlsave():  # 액셀 저장 파트
 
 def xlout():  # 조회 기능 파트
     # 기능 지원 회사 나열, ㅇ
-    print()
-    print("1. 회사 정보 조회하기")
-    print("2. 회사 지원홈페이지 가기")
+    print("1. ")
+    print("2. 회사 정보 조회하기")
+    print("3. 회사 지원홈페이지 가기")
+    print("4. 지원 마감된 제외하고 회사 나열하기")
+    print("5. 코딩테스트가 있는 지원회사 나열하기")
+    print("")
     a = input("원하시는 업무 번호를 적어주세요(나가기는 * 입력) : ")
 
-    if a == '1':
-        xlcominfo()
-    elif a == '2':
-        xlrecurl()
+# <<<<<<< HEAD
+#     if a == '1':
+#         xlcominfo()
+#     elif a == '2':
+#         xlrecurl()
+#
+#
+# def xlrecurl():
+# =======
+#     if a == '2' :
+#         xlcominfo()
+#     elif a == '3' :
+#         xlrecurl()
 
 
-def xlrecurl():
+def xlrecurl() :
+# >>>>>>> 9c2f079348bac256883126b6fe7399a57c79754d
     print()
     # ht = input("저장된 엑셀파일의 주소를 적어주세요 : ")
     wb = xl.load_workbook('Company Schedules.xlsx')
