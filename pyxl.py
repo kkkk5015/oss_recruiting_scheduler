@@ -11,12 +11,12 @@ from openpyxl.styles import Font
 '''
     기능 저장, 분류, ...
 
-    첫화면 기능 선택 
-        저장 시 필요한 요소 
+    첫화면 기능 선택
+        저장 시 필요한 요소
             회사명, 마감일, 코테 유무(날짜), 회사지원url, 코테 지원 언어,...
 
-        분류 
-            지원 날짜별,  
+        분류
+            지원 날짜별,
 '''
 
 def create(): #엑셀파일 만들어서 구분하기
@@ -70,23 +70,8 @@ def xlout():  # 조회 기능 파트
     print("")
     a = input("원하시는 업무 번호를 적어주세요(나가기는 * 입력) : ")
 
-# <<<<<<< HEAD
-#     if a == '1':
-#         xlcominfo()
-#     elif a == '2':
-#         xlrecurl()
-#
-#
-# def xlrecurl():
-# =======
-#     if a == '2' :
-#         xlcominfo()
-#     elif a == '3' :
-#         xlrecurl()
-
 
 def xlrecurl() :
-# >>>>>>> 9c2f079348bac256883126b6fe7399a57c79754d
     print()
     # ht = input("저장된 엑셀파일의 주소를 적어주세요 : ")
     wb = xl.load_workbook('Company Schedules.xlsx')
@@ -167,10 +152,3 @@ while True:
         xlsave()
     if st == '2':
         xlout()
-
-
-
-
-
-
-
