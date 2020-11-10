@@ -17,27 +17,47 @@ from openpyxl.styles import Font
             지원 날짜별,  
 '''
 def create(): #엑셀파일 만들어서 구분하기
-    wb = Workbook()
-    ws = wb.active
-    ws['A1'] = "회사명"
-    # 폰트 스타일링
-    ws['A1'].font = Font(bold=True,color='000000FF',size=15)
-    ws['B1'] = "마감일"
-    ws['B1'].font = Font(bold=True,color='000000FF',size=15)
-    ws['C1'] = "코테 유무(날짜)"
-    ws['C1'].font = Font(bold=True,color='000000FF',size=15)
-    ws['D1'] = '회사지원url'
-    ws['D1'].font = Font(bold=True,color='000000FF',size=15)
-    ws['E1'] = '코테 지원 언어'
-    ws['E1'].font = Font(bold=True,color='000000FF',size=15)
-    # ht = input("엑셀파일 만들기 위해 저장할 위치 입력해주세요 : ")
-    wb.save('Company Schedules.xlsx')
-    print("현재 파일 위치에 'Company Schedules'라는 엑셀 파일을 만들었습니다")
+
+    try :
+        xl.load_workbook('Company Schedules.xlsx')
+    except FileNotFoundError as f :
+        wb = Workbook()
+        ws = wb.active
+        ws['A1'] = "회사명"
+        # 폰트 스타일링
+        ws['A1'].font = Font(bold=True, color='000000FF', size=15)
+        ws['B1'] = "마감일"
+        ws['B1'].font = Font(bold=True, color='000000FF', size=15)
+        ws['C1'] = "코테 유무(날짜)"
+        ws['C1'].font = Font(bold=True, color='000000FF', size=15)
+        ws['D1'] = '회사지원url'
+        ws['D1'].font = Font(bold=True, color='000000FF', size=15)
+        ws['E1'] = '코테 지원 언어'
+        ws['E1'].font = Font(bold=True, color='000000FF', size=15)
+        # ht = input("엑셀파일 만들기 위해 저장할 위치 입력해주세요 : ")
+        wb.save('Company Schedules.xlsx')
+        print()
+        print("현재 파일 위치에 'Company Schedules'라는 엑셀 파일을 만들었습니다")
+        return
+
+    if xl.load_workbook('Company Schedules.xlsx') :
+        print()
+        an = input("이미 생성된 파일이 존재합니다. 기존 액셀에 이어서 하시겠습니까? (y/n) : ")
+        if an == 'y' :
+            xlsave()
+
 
 def xlsave() : # 액셀 저장 파트
+
     # #print("일정을 저장할 엑셀파일의 주소를 적어주세요 : ",sep='',end='')
     # ht = input("일정을 저장할 엑셀파일의 주소를 적어주세요 : ")
-    create()
+    try :
+        xl.load_workbook('Company Schedules.xlsx')
+    except FileNotFoundError as f:
+        print()
+        print('일정 저장용 파일이 존재하지 않습니다.')
+        create()
+
     while True :
         print()
         ent = []
@@ -151,15 +171,18 @@ def xlcominfo() : #회사 정보 가져오기
 
 while True :
     print()
-    print("1. 지원 일정 저장하기")
-    print("2. 지원 일정 조회하기")
+    print("1. 일정 저장 액셀파일 만들기")
+    print("2. 지원 일정 저장하기")
+    print("3. 지원 일정 조회하기")
     print("원하시는 업무 번호를 적어주세요(나가기는 * 입력) : ", sep="",end="")
     st = input()
     if st == '*' :
         break
     if st == '1' :
-        xlsave()
+        create()
     if st == '2' :
+        xlsave()
+    if st == '3' :
         xlout()
 
 
