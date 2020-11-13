@@ -2,10 +2,12 @@ import webbrowser
 import openpyxl as xl
 import datetime as d
 import requests
+import datetime
 from bs4 import BeautifulSoup
 import urllib
 from openpyxl.workbook import Workbook
-from openpyxl.styles import Font
+from openpyxl.styles import Font, PatternFill, Alignment
+from openpyxl.styles.borders import Border, Side
 '''
     기능 저장, 분류, ...
     
@@ -16,24 +18,54 @@ from openpyxl.styles import Font
         분류 
             지원 날짜별,  
 '''
-def create(): #엑셀파일 만들어서 구분하기
+def create(): # 엑셀파일 만들어서 구분하기
 
     try :
         xl.load_workbook('Company Schedules.xlsx')
     except FileNotFoundError as f :
         wb = Workbook()
         ws = wb.active
-        ws['A1'] = "회사명"
-        # 폰트 스타일링
-        ws['A1'].font = Font(bold=True, color='000000FF', size=15)
-        ws['B1'] = "마감일"
-        ws['B1'].font = Font(bold=True, color='000000FF', size=15)
-        ws['C1'] = "코테 유무(날짜)"
-        ws['C1'].font = Font(bold=True, color='000000FF', size=15)
-        ws['D1'] = '회사지원url'
-        ws['D1'].font = Font(bold=True, color='000000FF', size=15)
-        ws['E1'] = '코테 지원 언어'
-        ws['E1'].font = Font(bold=True, color='000000FF', size=15)
+        # 제목
+        thin_border = Border(left=Side(style='thin'),
+                             right=Side(style='thin'),
+                             top=Side(style='thin'),
+                             bottom=Side(style='thin'))
+        ws.merge_cells('A1:E1')
+        ws['A1'] = 'Company Schedules' # 변경하셔도 됩니다 (한국어로)
+        ws['A1'].alignment = Alignment(horizontal='center')
+        ws['A1'].font = Font(bold=True, color='FF000000', size=15) # color is aRGB
+        ws.cell(row=1, column=5).border = thin_border
+        # 구분
+        blackFill = PatternFill(fill_type='solid', start_color='FF000000', end_color='FF000000')
+        ws['A2'] = "회사명"
+        ws['A2'].alignment = Alignment(horizontal='center')
+        ws['A2'].font = Font(bold=True, color='FFFFFFFF', size=13)
+        ws['A2'].fill = blackFill
+        ws['B2'] = "마감일"
+        ws['B2'].alignment = Alignment(horizontal='center')
+        ws['B2'].font = Font(bold=True, color='FFFFFFFF', size=13)
+        ws['B2'].fill = blackFill
+        ws['C2'] = "코테 유무(날짜)"
+        ws['C2'].font = Font(bold=True, color='FFFFFFFF', size=13)
+        ws['C2'].fill = blackFill
+        ws['D2'] = '회사지원url'
+        ws['D2'].alignment = Alignment(horizontal='center')
+        ws['D2'].font = Font(bold=True, color='FFFFFFFF', size=13)
+        ws['D2'].fill = blackFill
+        ws['E2'] = '코테 지원 언어'
+        ws['E2'].font = Font(bold=True, color='FFFFFFFF', size=13)
+        ws['E2'].fill = blackFill
+
+        ws['G2'] = "Last Update"
+        ws['G2'].alignment = Alignment(horizontal='center')
+        ws['G2'].font = Font(bold=True, color='FFFFFFFF', size=13)
+        ws['G2'].fill = blackFill
+        # ws.cell(row=3, column=7).border = thin_border
+        ws.column_dimensions['C'].width = 17
+        ws.column_dimensions['D'].width = 30
+        ws.column_dimensions['E'].width = 15
+        ws.column_dimensions['G'].width = 20
+
         # ht = input("엑셀파일 만들기 위해 저장할 위치 입력해주세요 : ")
         wb.save('Company Schedules.xlsx')
         print()
@@ -73,6 +105,7 @@ def xlsave() : # 액셀 저장 파트
         ws = wb['Sheet']
         # 혹시 필요하다면 sheet 값도 받아야함
         ws.append(ent)
+        ws['G3'] = datetime.datetime.today()
         wb.save('Company Schedules.xlsx')
         print()
         print("지원 회사가 저장되었습니다. ")
@@ -109,7 +142,7 @@ def xlrecurl() :
             col_l.append(cell.value)
         col_value.append(col_l)
     print()
-    for i, com in enumerate(col_value[0][1:]) :
+    for i, com in enumerate(col_value[0][2:]) :
         print('{}. {}'.format(i,com))
     print()
     comnum = int(input("원하는 회사의 번호를 입력해주세요 : "))
