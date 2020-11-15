@@ -115,7 +115,8 @@ def xlsave() : # 액셀 저장 파트
 
 def xlout() :  # 조회 기능 파트
     # 기능 지원 회사 나열, ㅇ
-    print("1. ")
+    print()
+    print("1. 뒤로가기")
     print("2. 회사 정보 조회하기")
     print("3. 회사 지원홈페이지 가기")
     print("4. 지원 마감된 제외하고 회사 나열하기")
@@ -123,10 +124,18 @@ def xlout() :  # 조회 기능 파트
     print("")
     a = input("원하시는 업무 번호를 적어주세요(나가기는 * 입력) : ")
 
-    if a == '2' :
+    
+    if a == '1' :
+        return
+    elif a == '2' :
         xlcominfo()
     elif a == '3' :
         xlrecurl()
+    elif a == '4' :
+        xlfinished()
+    elif a == '5' :
+        xlcodetest()
+        
 
 
 def xlrecurl() :
@@ -189,6 +198,8 @@ def xlcominfo() : #회사 정보 가져오기
         print('-------------------------------')
         print()
 
+        
+
 
     '''
     print("기업명 : "+cominfo[0])
@@ -199,7 +210,59 @@ def xlcominfo() : #회사 정보 가져오기
     '''
 
 
+def xlfinished() : #마감된 회사 출력
+    try :
+        xl.load_workbook('Company Schedules.xlsx')
+    except FileNotFoundError as f:
+        print()
+        print('일정 저장용 파일이 존재하지 않습니다.')
+        create()
 
+    wb = xl.load_workbook('Company Schedules.xlsx')
+    ws = wb['Sheet']
+
+    print()
+    i = 2 #카테고리 행 스킵
+    for r in ws.rows :
+        if(i > 0) :
+            i -= 1
+            continue
+        
+        mon = str(r[1].value).split('/')[0]
+        day = str(r[1].value).split('/')[1]
+        now = datetime.datetime.now()
+        deadline = datetime.datetime.strptime(str(now.year)+mon+day+'235959', '%Y%m%d%H%M%S')
+            
+        if(datetime.datetime.now() <= deadline) :
+            print('회사명:'+str(r[0].value)+'\t마감 날짜:'+r[1].value)
+
+
+def xlcodetest() : #코테가 있는 회사 출력
+    try :
+        xl.load_workbook('Company Schedules.xlsx')
+    except FileNotFoundError as f:
+        print()
+        print('일정 저장용 파일이 존재하지 않습니다.')
+        create()
+
+    wb = xl.load_workbook('Company Schedules.xlsx')
+    ws = wb['Sheet']
+
+    print()
+    i = 2
+    for r in ws.rows :
+        if(i > 0) :
+            i -= 1
+            continue
+
+        if(str(r[2].value) != 'x' and str(r[2].value) != 'X') : #코테가 있으면서 마감이 남은 회사 출력
+            mon = str(r[1].value).split('/')[0]
+            day = str(r[1].value).split('/')[1]
+            now = datetime.datetime.now()
+            deadline = datetime.datetime.strptime(str(now.year)+mon+day+'235959', '%Y%m%d%H%M%S')
+            
+            if(datetime.datetime.now() <= deadline) :
+                print('회사명:'+str(r[0].value)+'\t마감 날짜:'+str(r[1].value)+'    코테 날짜:'+r[2].value+'    언어:'+r[4].value)
 
 
 while True :
