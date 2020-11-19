@@ -122,7 +122,7 @@ def xlout() :  # 조회 기능 파트
     print("4. 지원 마감된 제외하고 회사 나열하기")
     print("5. 코딩테스트가 있는 지원회사 나열하기")
     print("")
-    a = input("원하시는 업무 번호를 적어주세요(나가기는 * 입력) : ")
+    a = input("원하시는 업무 번호를 적어주세요 : ")
 
     
     if a == '1' :
@@ -154,9 +154,10 @@ def xlrecurl() :
     for i, com in enumerate(col_value[0][2:]) :
         print('{}. {}'.format(i,com))
     print()
+    print(col_value)
     comnum = int(input("원하는 회사의 번호를 입력해주세요 : "))
     print()
-    comurl = col_value[3][comnum]
+    comurl = col_value[3][comnum+2]
     webbrowser.open(comurl)
 
 
@@ -165,19 +166,16 @@ def xlcominfo() : #회사 정보 가져오기
     comname = input("조회할 기업명을 입력해주세요 : ")
     cominfo = []
     temp = []
-    #comname = '파수닷컴'
     cominfourl = 'http://www.jobkorea.co.kr/Salary/Index?coKeyword=' + comname + '&tabindex=0&indsCtgrCode=&indsCode=&jobTypeCode=&haveAGI=0&orderCode=2&coPage=1#salarySearchCompany'
-    # mykey = {'keyword' : comname }
+
     r = requests.get(cominfourl)
     soup = BeautifulSoup(r.text, 'html.parser')
     keyword = soup.select('.salaryCompanyList .container .list li a')
-    #print(keyword)
+
     for word in keyword:
         w = list(map(str,word.get_text().split('\n')))
         temp.append(w)
 
-        #temp = list(map(str, word.get_text().split('\n')))
-    #print(temp)
     for c in temp :
         t = []
         for k in c :
