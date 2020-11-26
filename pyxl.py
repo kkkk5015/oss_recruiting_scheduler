@@ -1,17 +1,14 @@
 import webbrowser
 import openpyxl as xl
-import datetime as d
 import requests
 import datetime
 import os
 from bs4 import BeautifulSoup
 import time
-from getch import getch, pause
-from msvcrt import getch
-import urllib
 from openpyxl.workbook import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment
 from openpyxl.styles.borders import Border, Side
+
 '''
     기능 저장, 분류, ...
     
@@ -70,7 +67,6 @@ def create(): # 엑셀파일 만들어서 구분하기
         ws.column_dimensions['E'].width = 15
         ws.column_dimensions['G'].width = 20
 
-        # ht = input("엑셀파일 만들기 위해 저장할 위치 입력해주세요 : ")
         wb.save('Company Schedules.xlsx')
         os.system('cls')
         print("------------------------------------------------------------")
@@ -82,7 +78,6 @@ def create(): # 엑셀파일 만들어서 구분하기
         print("\033[31m"+" 현재 폴더에 'Company Schedules'라는 엑셀 파일을 만들었습니다"+"\033[0m")
         print()
         time.sleep(3)
-        #pause('            아무 키나 눌러 메뉴로 이동(영문자로)')
         return
 
     if xl.load_workbook('Company Schedules.xlsx') :
@@ -96,13 +91,11 @@ def create(): # 엑셀파일 만들어서 구분하기
         print("\033[31m"+ "                  이미 파일이 존재합니다."+"\033[0m")
         time.sleep(3)
         print()
-        #pause('            아무 키나 눌러 메뉴로 이동(영문자로) ')
 
 
 def xlsave() : # 액셀 저장 파트
 
-    # #print("일정을 저장할 엑셀파일의 주소를 적어주세요 : ",sep='',end='')
-    # ht = input("일정을 저장할 엑셀파일의 주소를 적어주세요 : ")
+
     try :
         xl.load_workbook('Company Schedules.xlsx')
     except FileNotFoundError as f:
@@ -116,8 +109,8 @@ def xlsave() : # 액셀 저장 파트
         print("\033[31m" + '            일정 저장용 파일이 존재하지 않습니다.' + "\033[0m")
         print()
         time.sleep(3)
-        #pause('            아무 키나 눌러 메뉴로 이동(영문자로) ')
         return
+
     while True :
         os.system('cls')
         print("------------------------------------------------------------")
@@ -157,7 +150,7 @@ def xlsave() : # 액셀 저장 파트
 
 
 def xlout() :  # 조회 기능 파트
-    # 기능 지원 회사 나열, ㅇ
+    # 기능 지원 회사 나열
     while True :
         os.system('cls')
         print("------------------------------------------------------------")
@@ -204,7 +197,7 @@ def xlrecurl() :
         print("\033[31m" + '            일정 저장용 파일이 존재하지 않습니다.' + "\033[0m")
         print()
         time.sleep(3)
-        #pause('            아무 키나 눌러 메뉴로 이동(영문자로) ')
+
         return
     os.system('cls')
     print("------------------------------------------------------------")
@@ -214,7 +207,7 @@ def xlrecurl() :
     print("------------------------------------------------------------")
     print("                   회사 지원홈페이지 열기                    ")
     print("------------------------------------------------------------")
-    # ht = input("저장된 엑셀파일의 주소를 적어주세요 : ")
+
     wb = xl.load_workbook('Company Schedules.xlsx')
     # 필요하다면 sheet 값도 받아야한다.
     ws = wb['Sheet']
@@ -291,7 +284,6 @@ def xlcominfo() : #회사 정보 가져오기
         print()
     print("------------------------------------------------------------")
     print()
-    #pause('            아무 키나 눌러 메뉴로 이동(영문자로) ')
 
         
 
@@ -319,8 +311,9 @@ def xlfinished() : #마감된 회사 출력
         print("\033[31m" + '            일정 저장용 파일이 존재하지 않습니다.' + "\033[0m")
         print()
         time.sleep(3)
-        #pause('            아무 키나 눌러 메뉴로 이동(영문자로) ')
+
         return
+
     os.system('cls')
     print("------------------------------------------------------------")
     print("|                   RECRUITING SCHEDULER                   |")
@@ -350,7 +343,7 @@ def xlfinished() : #마감된 회사 출력
     time.sleep(3)
     print("------------------------------------------------------------")
     print()
-    #pause('            아무 키나 눌러 메뉴로 이동(영문자로) ')
+
 
 
 def xlcodetest() : #코테가 있는 회사 출력
@@ -366,8 +359,9 @@ def xlcodetest() : #코테가 있는 회사 출력
         print()
         print("\033[31m" + '            일정 저장용 파일이 존재하지 않습니다.' + "\033[0m")
         print()
-        #pause('            아무 키나 눌러 메뉴로 이동(영문자로) ')
+
         return
+
     os.system('cls')
     print("------------------------------------------------------------")
     print("|                   RECRUITING SCHEDULER                   |")
@@ -399,7 +393,7 @@ def xlcodetest() : #코테가 있는 회사 출력
     time.sleep(3)
     print("------------------------------------------------------------")
     print()
-    #pause('            아무 키나 눌러 메뉴로 이동(영문자로) ')
+
 
 while True :
     os.system('cls')
