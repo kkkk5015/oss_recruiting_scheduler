@@ -5,7 +5,9 @@ import requests
 import datetime
 import os
 from bs4 import BeautifulSoup
+import time
 from getch import getch, pause
+from msvcrt import getch
 import urllib
 from openpyxl.workbook import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment
@@ -77,9 +79,10 @@ def create(): # 엑셀파일 만들어서 구분하기
         print("                  일정 저장 엑셀파일 만들기                   ")
         print("------------------------------------------------------------")
         print()
-        print(" 현재 폴더에 'Company Schedules'라는 엑셀 파일을 만들었습니다")
+        print("\033[31m"+" 현재 폴더에 'Company Schedules'라는 엑셀 파일을 만들었습니다"+"\033[0m")
         print()
-        pause('            아무 키나 눌러 메뉴로 이동(영문자로)')
+        time.sleep(3)
+        #pause('            아무 키나 눌러 메뉴로 이동(영문자로)')
         return
 
     if xl.load_workbook('Company Schedules.xlsx') :
@@ -90,9 +93,10 @@ def create(): # 엑셀파일 만들어서 구분하기
         print("                  일정 저장 엑셀파일 만들기                   ")
         print("------------------------------------------------------------")
         print()
-        print("                  이미 파일이 존재합니다.")
+        print("\033[31m"+ "                  이미 파일이 존재합니다."+"\033[0m")
+        time.sleep(3)
         print()
-        pause('            아무 키나 눌러 메뉴로 이동(영문자로) ')
+        #pause('            아무 키나 눌러 메뉴로 이동(영문자로) ')
 
 
 def xlsave() : # 액셀 저장 파트
@@ -109,9 +113,10 @@ def xlsave() : # 액셀 저장 파트
         print("                     지원 일정 저장하기                      ")
         print("------------------------------------------------------------")
         print()
-        print('            일정 저장용 파일이 존재하지 않습니다.')
+        print("\033[31m" + '            일정 저장용 파일이 존재하지 않습니다.' + "\033[0m")
         print()
-        pause('            아무 키나 눌러 메뉴로 이동(영문자로) ')
+        time.sleep(3)
+        #pause('            아무 키나 눌러 메뉴로 이동(영문자로) ')
         return
     while True :
         os.system('cls')
@@ -141,7 +146,7 @@ def xlsave() : # 액셀 저장 파트
         ws['G3'] = datetime.datetime.today()
         wb.save('Company Schedules.xlsx')
         print()
-        print("지원 회사가 저장되었습니다. ")
+        print("\033[31m" + "지원 회사가 저장되었습니다. " + "\033[0m")
         print()
         back = input("게속하려면 1, 뒤로 가려면 2 입력 : ")
         if back == "1" :
@@ -196,9 +201,10 @@ def xlrecurl() :
         print("                     지원 일정 조회하기                      ")
         print("------------------------------------------------------------")
         print()
-        print('            일정 저장용 파일이 존재하지 않습니다.')
+        print("\033[31m" + '            일정 저장용 파일이 존재하지 않습니다.' + "\033[0m")
         print()
-        pause('            아무 키나 눌러 메뉴로 이동(영문자로) ')
+        time.sleep(3)
+        #pause('            아무 키나 눌러 메뉴로 이동(영문자로) ')
         return
     os.system('cls')
     print("------------------------------------------------------------")
@@ -219,15 +225,22 @@ def xlrecurl() :
             col_l.append(cell.value)
         col_value.append(col_l)
     print()
-    for i, com in enumerate(col_value[0][2:]) :
-        print('                          {}. {}'.format(i,com))
+    if len(col_value[0][2:]) != 0 :
+        for i, com in enumerate(col_value[0][2:]) :
+            print('                          {}. {}'.format(i,com))
+            print()
+
+        print("------------------------------------------------------------")
         print()
-    print("------------------------------------------------------------")
-    print()
-    comnum = int(input("                원하는 회사의 번호를 입력해주세요 : "))
-    print()
-    comurl = col_value[3][comnum+2]
-    webbrowser.open(comurl)
+        comnum = int(input("                원하는 회사의 번호를 입력해주세요 : "))
+        print()
+        comurl = col_value[3][comnum + 2]
+        webbrowser.open(comurl)
+    else :
+        print("\033[31m"+"                지원 목록이 비어있습니다."+'\033[0m')
+        print()
+        time.sleep(3)
+
 
 
 def xlcominfo() : #회사 정보 가져오기
@@ -278,7 +291,7 @@ def xlcominfo() : #회사 정보 가져오기
         print()
     print("------------------------------------------------------------")
     print()
-    pause('            아무 키나 눌러 메뉴로 이동(영문자로) ')
+    #pause('            아무 키나 눌러 메뉴로 이동(영문자로) ')
 
         
 
@@ -303,9 +316,10 @@ def xlfinished() : #마감된 회사 출력
         print("                     지원 일정 조회하기                      ")
         print("------------------------------------------------------------")
         print()
-        print('            일정 저장용 파일이 존재하지 않습니다.')
+        print("\033[31m" + '            일정 저장용 파일이 존재하지 않습니다.' + "\033[0m")
         print()
-        pause('            아무 키나 눌러 메뉴로 이동(영문자로) ')
+        time.sleep(3)
+        #pause('            아무 키나 눌러 메뉴로 이동(영문자로) ')
         return
     os.system('cls')
     print("------------------------------------------------------------")
@@ -330,11 +344,13 @@ def xlfinished() : #마감된 회사 출력
         deadline = datetime.datetime.strptime(str(now.year)+mon+day+'235959', '%Y%m%d%H%M%S')
             
         if(datetime.datetime.now() <= deadline) :
-            print('               회사명: '+str(r[0].value)+'\t마감 날짜: '+r[1].value)
+            print("\033[31m" + '               회사명: '+str(r[0].value)+'\t마감 날짜: '+r[1].value + "\033[0m" )
             print()
+
+    time.sleep(3)
     print("------------------------------------------------------------")
     print()
-    pause('            아무 키나 눌러 메뉴로 이동(영문자로) ')
+    #pause('            아무 키나 눌러 메뉴로 이동(영문자로) ')
 
 
 def xlcodetest() : #코테가 있는 회사 출력
@@ -348,9 +364,9 @@ def xlcodetest() : #코테가 있는 회사 출력
         print("                     지원 일정 조회하기                      ")
         print("------------------------------------------------------------")
         print()
-        print('            일정 저장용 파일이 존재하지 않습니다.')
+        print("\033[31m" + '            일정 저장용 파일이 존재하지 않습니다.' + "\033[0m")
         print()
-        pause('            아무 키나 눌러 메뉴로 이동(영문자로) ')
+        #pause('            아무 키나 눌러 메뉴로 이동(영문자로) ')
         return
     os.system('cls')
     print("------------------------------------------------------------")
@@ -377,11 +393,13 @@ def xlcodetest() : #코테가 있는 회사 출력
             deadline = datetime.datetime.strptime(str(now.year)+mon+day+'235959', '%Y%m%d%H%M%S')
             
             if(datetime.datetime.now() <= deadline) :
-                print('회사명: '+str(r[0].value)+'\t마감 날짜: '+str(r[1].value)+'    코테 날짜: '+r[2].value+'    언어:'+r[4].value)
+                print("\033[31m" + '회사명: '+str(r[0].value)+'\t마감 날짜: '+str(r[1].value)+'    코테 날짜: '+r[2].value+'    언어:'+r[4].value + "\033[0m")
                 print()
+
+    time.sleep(3)
     print("------------------------------------------------------------")
     print()
-    pause('            아무 키나 눌러 메뉴로 이동(영문자로) ')
+    #pause('            아무 키나 눌러 메뉴로 이동(영문자로) ')
 
 while True :
     os.system('cls')
