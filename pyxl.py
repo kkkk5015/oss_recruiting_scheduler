@@ -77,7 +77,7 @@ def create(): # 엑셀파일 만들어서 구분하기
         print()
         print("\033[31m"+" 현재 폴더에 'Company Schedules'라는 엑셀 파일을 만들었습니다"+"\033[0m")
         print()
-        time.sleep(3)
+        time.sleep(2.3)
         return
 
     if xl.load_workbook('Company Schedules.xlsx') :
@@ -89,7 +89,7 @@ def create(): # 엑셀파일 만들어서 구분하기
         print("------------------------------------------------------------")
         print()
         print("\033[31m"+ "                  이미 파일이 존재합니다."+"\033[0m")
-        time.sleep(3)
+        time.sleep(1.5)
         print()
 
 
@@ -108,7 +108,7 @@ def xlsave() : # 액셀 저장 파트
         print()
         print("\033[31m" + '            일정 저장용 파일이 존재하지 않습니다.' + "\033[0m")
         print()
-        time.sleep(3)
+        time.sleep(1.5)
         return
 
     while True :
@@ -196,7 +196,7 @@ def xlrecurl() :
         print()
         print("\033[31m" + '            일정 저장용 파일이 존재하지 않습니다.' + "\033[0m")
         print()
-        time.sleep(3)
+        time.sleep(1.5)
 
         return
     os.system('cls')
@@ -232,59 +232,64 @@ def xlrecurl() :
     else :
         print("\033[31m"+"                지원 목록이 비어있습니다."+'\033[0m')
         print()
-        time.sleep(3)
+        time.sleep(1.5)
 
 
 
 def xlcominfo() : #회사 정보 가져오기
-    os.system('cls')
-    print("------------------------------------------------------------")
-    print("|                   RECRUITING SCHEDULER                   |")
-    print("------------------------------------------------------------")
-    print("                     지원 일정 조회하기                     ")
-    print("------------------------------------------------------------")
-    print("                      회사 정보 조회                       ")
-    print("------------------------------------------------------------")
-    print()
-    comname = input("              조회할 기업명을 입력해주세요 : ")
-    print()
-    print("------------------------------------------------------------")
-    print()
-    cominfo = []
-    temp = []
-    cominfourl = 'http://www.jobkorea.co.kr/Salary/Index?coKeyword=' + comname + '&tabindex=0&indsCtgrCode=&indsCode=&jobTypeCode=&haveAGI=0&orderCode=2&coPage=1#salarySearchCompany'
-
-    r = requests.get(cominfourl)
-    soup = BeautifulSoup(r.text, 'html.parser')
-    keyword = soup.select('.salaryCompanyList .container .list li a')
-
-    for word in keyword:
-        w = list(map(str,word.get_text().split('\n')))
-        temp.append(w)
-
-    for c in temp :
-        t = []
-        for k in c :
-            if k in t or k == '' :
-                continue
-            elif k == '좋아요' or k == '채용중':
-                continue
-            t.append(k)
-
-        cominfo.append(t)
-
-    for com in cominfo :
-        for p, line in enumerate(com) :
-            print("                     ", sep="", end="")
-            print(line)
-            if p == 0 :
-                print()
+    while True :
+        os.system('cls')
+        print("------------------------------------------------------------")
+        print("|                   RECRUITING SCHEDULER                   |")
+        print("------------------------------------------------------------")
+        print("                     지원 일정 조회하기                     ")
+        print("------------------------------------------------------------")
+        print("                      회사 정보 조회                       ")
+        print("------------------------------------------------------------")
         print()
+        comname = input("              조회할 기업명을 입력해주세요 : ")
         print()
+        print("------------------------------------------------------------")
         print()
-    print("------------------------------------------------------------")
-    time.sleep(3)
-    print()
+        cominfo = []
+        temp = []
+        cominfourl = 'http://www.jobkorea.co.kr/Salary/Index?coKeyword=' + comname + '&tabindex=0&indsCtgrCode=&indsCode=&jobTypeCode=&haveAGI=0&orderCode=2&coPage=1#salarySearchCompany'
+
+        r = requests.get(cominfourl)
+        soup = BeautifulSoup(r.text, 'html.parser')
+        keyword = soup.select('.salaryCompanyList .container .list li a')
+
+        for word in keyword:
+            w = list(map(str,word.get_text().split('\n')))
+            temp.append(w)
+
+        for c in temp :
+            t = []
+            for k in c :
+                if k in t or k == '' :
+                    continue
+                elif k == '좋아요' or k == '채용중':
+                    continue
+                t.append(k)
+
+            cominfo.append(t)
+
+        for com in cominfo :
+            for p, line in enumerate(com) :
+                print("                     ", sep="", end="")
+                print(line)
+                if p == 0 :
+                    print()
+            print()
+            print()
+            print()
+        print("------------------------------------------------------------")
+        print()
+        back = input("           게속하려면 1, 뒤로 가려면 2 입력 : ")
+        if back == "1" :
+            continue
+        else :
+            break
 
         
 
@@ -298,7 +303,7 @@ def xlcominfo() : #회사 정보 가져오기
     '''
 
 
-def xlfinished() : #마감된 회사 출력
+def xlfinished() : #마감 전인 회사 출력
     try :
         xl.load_workbook('Company Schedules.xlsx')
     except FileNotFoundError as f:
@@ -311,7 +316,8 @@ def xlfinished() : #마감된 회사 출력
         print()
         print("\033[31m" + '            일정 저장용 파일이 존재하지 않습니다.' + "\033[0m")
         print()
-        time.sleep(3)
+        print("------------------------------------------------------------")
+        time.sleep(1.5)
 
         return
 
@@ -341,10 +347,8 @@ def xlfinished() : #마감된 회사 출력
             print("\033[31m" + '               회사명: '+str(r[0].value)+'\t마감 날짜: '+r[1].value + "\033[0m" )
             print()
 
-    time.sleep(3)
     print("------------------------------------------------------------")
-    print()
-
+    time.sleep(3)
 
 
 def xlcodetest() : #코테가 있는 회사 출력
@@ -360,7 +364,7 @@ def xlcodetest() : #코테가 있는 회사 출력
         print()
         print("\033[31m" + '            일정 저장용 파일이 존재하지 않습니다.' + "\033[0m")
         print()
-
+        time.sleep(1.5)
         return
 
     os.system('cls')
@@ -391,9 +395,9 @@ def xlcodetest() : #코테가 있는 회사 출력
                 print("\033[31m" + '회사명: '+str(r[0].value)+'\t마감 날짜: '+str(r[1].value)+'    코테 날짜: '+r[2].value+'    언어:'+r[4].value + "\033[0m")
                 print()
 
-    time.sleep(3)
+    
     print("------------------------------------------------------------")
-    print()
+    time.sleep(3)
 
 
 while True :
